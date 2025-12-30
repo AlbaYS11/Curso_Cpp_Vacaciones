@@ -11,5 +11,7 @@ int main() {
     cout << "Hello World!" << endl;
     cout << "I am ready for semester " << semestre << endl;
 
+    cout << "Jala Porfa" << endl;
+
     return 0; // Program finished successfully
 }
