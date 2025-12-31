@@ -6,40 +6,50 @@ using namespace std; // Para poder usar cin, cout y string sin alias, es la caja
 
 int main()
 {
+    cout << "¿Deseas iniciar el registro?" << endl;
+    cin >> band;
 
-    int edad;
-    string nombre;
-    double precio;
-
-    cout << "¡Bienvenido! \nPara entrar haz el registro." << endl;
-    cout << "Ingresa tu nombre:" << endl;
-    cin >> nombre; // Corta espacios
-
-    cout << "Ingresa tu edad:" << endl;
-    cin >> edad;
-
-    if (edad >= 18)
+    while (band == 1)
     {
 
-        cout << "Ingresa el precio de tu entrada:" << endl;
-        cin >> precio;
+        int edad, band;
+        string nombre;
+        double precio;
 
-        if (precio < 150)
+        cout << "¡Bienvenido! \nPara entrar haz el registro." << endl;
+        cout << "Ingresa tu nombre:" << endl;
+        cin >> nombre; // Corta espacios
+
+        cout << "Ingresa tu edad:" << endl;
+        cin >> edad;
+
+        if (edad >= 18)
         {
 
-            cout << "Te falta varo, consigue más." << endl;
+            cout << "Ingresa el precio de tu entrada:" << endl;
+            cin >> precio;
+
+            if (precio < 150)
+            {
+
+                cout << "Te falta varo, consigue mas." << endl;
+            }
+            else
+            {
+
+                cout << "\nResumen del ticket:\nNombre: " << nombre << "\nEdad: " << edad << "\nA pagar: " << precio << endl;
+            }
         }
         else
         {
-
-            cout << "\nResumen del ticket:\nNombre: " << nombre << "\nEdad: " << edad << "\nA pagar: " << precio << endl;
+            cout << "¡Largo de aqui, niño!" << endl;
         }
-    }
-    else
-    {
-        cout << "¡Largo de aqui, niño!" << endl;
+
+        cout << "¿Deseas continuar?" << endl;
+        cin >> band;
     }
 
+    cout << "Registro terminado." << endl;
     return 0;
 }
 // ¿Por qué pasa? cin es flojo. Lee caracteres hasta que encuentra un espacio en blanco (espacio, tabulador o enter)
