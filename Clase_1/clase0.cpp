@@ -1,24 +1,32 @@
 #include <iostream> //Para poder usar System input y output osea cin y cout
 #include <string>   //Para poder usar strings comodamente
+
+#include <vector>
 // Import
 
 using namespace std; // Para poder usar cin, cout y string sin alias, es la caja de herramientas
 
 int main()
 {
+    vector<string> lista;
+    int band;
+
     cout << "¿Deseas iniciar el registro?" << endl;
     cin >> band;
 
+    cin.ignore;
+    
     while (band == 1)
     {
 
-        int edad, band;
+        int edad;
         string nombre;
         double precio;
 
         cout << "¡Bienvenido! \nPara entrar haz el registro." << endl;
         cout << "Ingresa tu nombre:" << endl;
-        cin >> nombre; // Corta espacios
+        getline(cin, nombre);
+        // cin >> nombre; se corta al ver un espacio. El otro lee toda la linea
 
         cout << "Ingresa tu edad:" << endl;
         cin >> edad;
@@ -38,6 +46,7 @@ int main()
             {
 
                 cout << "\nResumen del ticket:\nNombre: " << nombre << "\nEdad: " << edad << "\nA pagar: " << precio << endl;
+                lista.push_back(nombre);
             }
         }
         else
@@ -47,9 +56,19 @@ int main()
 
         cout << "¿Deseas continuar?" << endl;
         cin >> band;
+        cin.ignore();
     }
 
-    cout << "Registro terminado." << endl;
+    if (!lista.empty())
+    {
+        cout << "lista de invitados: " << endl;
+        for (string i : lista)
+        {
+            cout << i << endl;
+        }
+    }
+
+    cout << "\nRegistro terminado." << endl;
     return 0;
 }
 // ¿Por qué pasa? cin es flojo. Lee caracteres hasta que encuentra un espacio en blanco (espacio, tabulador o enter)
