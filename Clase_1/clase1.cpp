@@ -6,6 +6,18 @@
 
 using namespace std; // Para poder usar cin, cout y string sin alias, es la caja de herramientas
 
+void imprimirRecibo(vector<string> l){
+
+if (!lista.empty())
+    {
+        cout << "lista de invitados final: " << endl;
+        for (string i : lista)
+        {
+            cout << i << endl;
+        }
+    }
+}
+
 int main()
 {
     vector<string> lista;
@@ -59,14 +71,7 @@ int main()
         cin.ignore();
     }
 
-    if (!lista.empty())
-    {
-        cout << "lista de invitados: " << endl;
-        for (string i : lista)
-        {
-            cout << i << endl;
-        }
-    }
+    imprimirRecibo(lista);    
 
     cout << "\nRegistro terminado." << endl;
     return 0;
