@@ -4,19 +4,19 @@
 
 using namespace std;
 
-struct Persona
+struct Persona //La Mochila de Datos. Es como un mini objeto
 {
     int edad;
     string nombre;
     double precio;
 };
-
-void imprimirRecibo(vector<Persona> l)
+//El signo sifnifica pasarle la direccion de memoria
+void imprimirRecibo(vector<Persona>& l) //Usa directamente el de la referencia que le pasas como java
 {
     if (!l.empty())
     {
         cout << "lista de invitados final: " << endl;
-        for (Persona i : l)
+        for (const Persona& i : l) //Igual aqui. sin copias innecesarias e impidiendo modificacion
         {
             cout << i.nombre << endl;
         }
@@ -24,13 +24,13 @@ void imprimirRecibo(vector<Persona> l)
 }
 
 int main()
-{
-    vector<Persona> lista;
+{ 
+    vector<Persona> lista; //Array list del struct
     int band;
 
     cout << "¿Deseas iniciar el registro?" << endl;
     cin >> band;
-    cin.ignore();
+    cin.ignore(); //Elimina el espacio residual de antes para el getline
 
     while (band == 1)
     {
@@ -38,11 +38,11 @@ int main()
         string nTemp;
         double pTemp;
 
-        Persona p;
+        Persona p; //Declaramos el struct, aca ya inicia
 
         cout << "¡Bienvenido! \nPara entrar haz el registro." << endl;
         cout << "Ingresa tu nombre:" << endl;
-        getline(cin, nTemp);
+        getline(cin, nTemp); //Leer toda la linea, debemos eliminar la anterior
 
         cout << "Ingresa tu edad:" << endl;
         cin >> eTemp;
@@ -59,11 +59,12 @@ int main()
             }
             else
             {
+                //Llenamos el struct
                 p.edad = eTemp;
                 p.nombre = nTemp;
                 p.precio = pTemp;
                 cout << "\nResumen del ticket:\nNombre: " << p.nombre << "\nEdad: " << p.edad << "\nA pagar: " << p.precio << endl;
-                lista.push_back(p);
+                lista.push_back(p); //Mostramos del original y agregamos a la lista
             }
     
         }
