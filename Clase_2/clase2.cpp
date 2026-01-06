@@ -17,6 +17,7 @@ void imprimirRecibo(vector<Persona>& l) //Usa directamente el de la referencia q
     {
         cout << "lista de invitados final: " << endl;
         for (const Persona& i : l) //Igual aqui. sin copias innecesarias e impidiendo modificacion
+        //para usar los valores originales del arraylist, pero por el const se...
         {
             cout << i.nombre << endl;
         }
@@ -59,7 +60,7 @@ int main()
             }
             else
             {
-                //Llenamos el struct
+                //Llenamos el struct como en java con las variables
                 p.edad = eTemp;
                 p.nombre = nTemp;
                 p.precio = pTemp;
