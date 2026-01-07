@@ -173,20 +173,24 @@ void modificar(vector<Producto> &p)
         cout << "Ingresa el numero del atributo a modificar:\n1. Nombre.\n2. Precio." << endl;
         cin >> opc;
 
-        if (opc > 0 && opc <= 2)
+        switch (opc)
         {
-            cout << "Ingresa el nuevo atributo" << endl;
-            if (opc == 1)
-            {
-                cin.ignore();
-                getline(cin, aux->nombre);
-                return;
-            }
+        case 1:
+            cin.ignore();
+            cout << "Ingresa el nuevo nombre:" << endl;
+            getline(cin, aux->nombre);
+            break;
+
+        case 2:
+            cout << "Ingresa el nuevo precio:" << endl;
             cin >> aux->precio;
-            return;
+            break;
+
+        default:
+            cout << "Esa opcion no existe." << endl;
+            break;
         }
 
-        cout << "Esa opcion no existe." << endl;
         return;
     }
 
