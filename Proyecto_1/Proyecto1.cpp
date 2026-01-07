@@ -1,0 +1,240 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Producto
+{
+    int clave;
+    string nombre;
+    double precio;
+};
+
+void agregar(vector<Producto> &p)
+{
+    int clave;
+    Producto aux;
+
+    cout << "Agregando productos." << endl;
+    mostrarClaves(p);
+
+    cout << "\nIngresa la clave unica del producto: " << endl;
+    cin >> clave;
+
+    while (buscar(clave, p) != nullptr)
+    {
+        cout << "Clave invalida. Intenta otra vez: ";
+        cin >> clave;
+    }
+
+    aux.clave = clave;
+
+    cout << "Ingresa el nombre del producto: " << endl;
+    cin.ignore();
+    getline(cin, aux.nombre);
+
+    cout << "Ingresa el precio del producto: " << endl;
+    cin >> aux.precio;
+
+    p.push_back(aux);
+
+    cout << "Producto agregado con exito." << endl;
+}
+
+Producto *buscar(int clave, vector<Producto> &p)
+{
+    for (int i = 0; i < p.size(); i++)
+    {
+        if (clave == p[i].clave)
+        {
+            return &p[i];
+        }
+    }
+    return nullptr;
+}
+
+int indice(int clave, vector<Producto> &p)
+{
+    for (int i = 0; i < p.size(); i++)
+    {
+        if (clave == p[i].clave)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void mostrarClaves(const vector<Producto> &p)
+{
+    if (p.empty())
+    {
+        cout << "El inventario esta vacio.\n";
+        return;
+    }
+
+    cout << "Lista de claves en uso:\n";
+    for (const auto &prod : p) // auto deduce el tipo por ti y ademas usa el original sin copias
+        cout << prod.clave << '\n';
+}
+
+void mostrarTodo(const vector<Producto> &p)
+{
+    if (p.empty())
+    {
+        cout << "El inventario esta vacio.\n";
+        return;
+    }
+
+    cout << "---LISTA---\n";
+    for (int i = 0; i < p.size(); i++)
+    {
+        cout << i + 1 << ": "
+             << p[i].clave << ". "
+             << p[i].nombre << " $"
+             << p[i].precio << '\n';
+    }
+}
+
+void mostrarNombres(const vector<Producto> &p)
+{
+    if (p.empty())
+    {
+        cout << "El inventario esta vacio.\n";
+        return;
+    }
+
+    cout << "Lista de nombres de productos:\n";
+    for (const auto &prod : p)
+        cout << prod.nombre << '\n';
+}
+
+void Busqueda(vector<Producto> &p)
+{
+    int clave;
+    cout << "Buscando el producto." << endl;
+    mostrarTodo(p);
+
+    cout << "\nIngresa la clave del producto a buscar:" << endl;
+    cin >> clave;
+
+    Producto *aux = buscar(clave, p);
+
+    if (aux != nullptr)
+    {
+        cout << aux->clave << ". "
+             << aux->nombre << " $"
+             << aux->precio << '\n';
+        return;
+    }
+
+    cout << "Ese producto no existe." << endl;
+}
+
+void eliminar(vector<Producto> &p)
+{
+    int clave, aux;
+
+    cout << "Eliminando un producto." << endl;
+    mostrarTodo(p);
+
+    cout << "\nIngresa la clave del producto a eliminar:" << endl;
+    cin >> clave;
+
+    aux = indice(clave, p);
+    if (aux != -1)
+    {
+        p.erase(p.begin() + aux);
+        cout << "Producto eliminado con exito." << endl;
+        return;
+    }
+
+    cout << "Ese producto no existe." << endl;
+}
+
+void modificar(vector<Producto> &p)
+{
+    int clave, opc;
+
+    cout << "Modificando un producto." << endl;
+    mostrarTodo(p);
+
+    cout << "\nIngresa la clave del producto a modificar:" << endl;
+    cin >> clave;
+    Producto *aux = buscar(clave, p);
+
+    if (aux != nullptr)
+    {
+        cout << aux->clave << ". "
+             << aux->nombre << " $"
+             << aux->precio << '\n';
+
+        cout << "Ingresa el numero del atributo a modificar:\n1. Nombre.\n2. Precio." << endl;
+        cin >> opc;
+
+        if (opc > 0 && opc <= 2)
+        {
+            cout << "Ingresa el nuevo atributo" << endl;
+            if (opc == 1)
+            {
+                cin.ignore();
+                getline(cin, aux->nombre);
+                return;
+            }
+            cin >> aux->precio;
+            return;
+        }
+
+        cout << "Esa opcion no existe." << endl;
+        return;
+    }
+
+    cout << "Ese producto no existe." << endl;
+}
+
+int main()
+{
+    int opc;
+    vector<Producto> inv;
+
+    do
+    {
+        cout << "\n--- MENU ---\n1. Agregar producto.\n2. Buscar producto." << "\n3. Modificar producto.\n4. Eliminar Producto.\n0. Salir." << endl;
+        cin >> opc;
+        cin.ignore();
+
+        switch (opc)
+        {
+
+        case 1:
+            agregar(inv);
+            break;
+
+        case 2:
+            Busqueda(inv);
+            break;
+
+        case 3:
+            modificar(inv);
+            break;
+
+        case 4:
+            eliminar(inv);
+            break;
+
+        case 0:
+            cout << "Has salido." << endl;
+            break;
+
+        default:
+            cout << "ERROR. Ingresa una opcion valida." << endl;
+            break;
+        }
+
+    } while (opc != 0);
+
+    mostrarTodo(inv);
+
+    return 0;
+}

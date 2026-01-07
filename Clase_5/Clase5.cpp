@@ -7,7 +7,7 @@ random_device rnd;
 mt19937 gen(rnd());
 uniform_int_distribution<int> dist(0, 99);
 
-// Heap: memoria dinámica (más grande, pero más lenta y manual)
+//Heap: memoria dinámica (más grande, pero más lenta y manual)
 //Tú pides espacio prestado manualmente. NO se borra sola.
 
 int main(){
