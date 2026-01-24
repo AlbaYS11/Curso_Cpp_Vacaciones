@@ -1,69 +1,76 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream> //Libreria para guardar archivos
 
 using namespace std;
 
-struct Producto 
+struct Producto
 {
     int clave;
     string nombre;
     double precio;
 };
 
-Producto *buscar(int clave, vector<Producto> &p) //Metodo que regresa un puntero de un solo producto
-{
-    for (int i = 0; i < p.size(); i++)
+void guardarArchivo(const vector<Producto> &inv)
+{ // Funcion para guardar productos en un archivo
+
+    ofstream archivo("inventario.txt"); // Crea un archivo nuevo sin importar
+    // Puente entre progra y archivo, nombre variable
+
+    if (archivo.is_open()) // Verifica si se pudo abrir o crear
     {
-        if (clave == p[i].clave)
+        for (const auto &p : inv)
         {
-            return &p[i]; //Regresa la direccion de ese puntero, si la clave existe
-        }
+            archivo << p.clave << " " << p.nombre << " " << p.precio << endl; // Sintaxis guardar esa linea en el txt
+        } //Espacios entre para leer
+
+        archivo.close(); // Siempre cerrar el archivo para guardar
+
+        cout << "--> Datos guardados en inventario.txt" << endl;
     }
-    return nullptr; //Regresa un puntero nulo si no encuentra la clave existente
-} 
-
-void agregar(vector<Producto> &p)
-{
-    int clave;
-    Producto aux; //Creando un struct
-
-    cout << "Agregando productos." << endl;
-    mostrarClaves(p);
-
-    cout << "\nIngresa la clave unica del producto: " << endl;
-    cin >> clave;
-
-    while (buscar(clave, p) != nullptr) //Lo hace mientras sea diferente de nulo osea esa ya existe
-    {                                   //Si es nulo significa que esa clave se puede tomar
-        cout << "Clave invalida. Intenta otra vez: ";
-        cin >> clave;
-    } 
-
-    aux.clave = clave;
-
-    cout << "Ingresa el nombre del producto: " << endl;
-    cin.ignore();
-    getline(cin, aux.nombre);
-
-    cout << "Ingresa el precio del producto: " << endl;
-    cin >> aux.precio;
-
-    p.push_back(aux); //Ingresa ese struct al vector(Array list)
-
-    cout << "Producto agregado con exito." << endl;
+    else
+    {
+        cout << "Error: No se pudo crear el archivo." << endl;
+    }
 }
 
-int indice(int clave, vector<Producto> &p) //Regresa el indice si encuentra la clave si no -1
+void cargarArchivo(vector<Producto> &inv) //funcion para abrir y guardar
+{
+
+    ifstream archivo("inventario.txt"); // Inicia el archivo para abrir
+
+    if (!archivo.is_open()) // Verifica si existe
+    {
+        cout << "--> No se encontro archivo previo. Iniciando inventario vacio." << endl;
+        return;
+    }
+
+    Producto p; // Declaramos para guardar del archivo
+
+    while (archivo >> p.clave) // O archivo >> p.clave >> p.nombre >> p.precio
+    { // mientras de datos y los asignamos a los demas
+
+        archivo >> p.nombre;
+        archivo >> p.precio; // Guardar
+
+        inv.push_back(p); // Meter al vector.
+    }
+
+    archivo.close();
+    cout << "--> Se cargaron " << inv.size() << " productos del archivo." << endl;
+}
+
+Producto *buscar(int clave, vector<Producto> &p)
 {
     for (int i = 0; i < p.size(); i++)
     {
         if (clave == p[i].clave)
         {
-            return i;
+            return &p[i];
         }
     }
-    return -1;
+    return nullptr;
 }
 
 void mostrarClaves(const vector<Producto> &p)
@@ -75,8 +82,8 @@ void mostrarClaves(const vector<Producto> &p)
     }
 
     cout << "Lista de claves en uso:\n";
-    for (const auto &prod : p) // auto deduce el tipo por ti (auto) y ademas usa el original sin copias (const)
-        cout << prod.clave << '\n'; //Comillas simples un caracter
+    for (const auto &prod : p)
+        cout << prod.clave << '\n';
 }
 
 void mostrarTodo(const vector<Producto> &p)
@@ -110,6 +117,50 @@ void mostrarNombres(const vector<Producto> &p)
         cout << prod.nombre << '\n';
 }
 
+
+void agregar(vector<Producto> &p)
+{
+    int clave;
+    Producto aux;
+    cout << "Agregando productos." << endl;
+    mostrarClaves(p);
+
+    cout << "\nIngresa la clave unica del producto: " << endl;
+    cin >> clave;
+
+    while (buscar(clave, p) != nullptr)
+    {
+        cout << "Clave invalida. Intenta otra vez: ";
+        cin >> clave;
+    }
+
+    aux.clave = clave;
+
+    cout << "Ingresa el nombre del producto: " << endl;
+    cin.ignore();
+    getline(cin, aux.nombre);
+
+    cout << "Ingresa el precio del producto: " << endl;
+    cin >> aux.precio;
+
+    p.push_back(aux);
+
+    cout << "Producto agregado con exito." << endl;
+}
+
+int indice(int clave, vector<Producto> &p)
+{
+    for (int i = 0; i < p.size(); i++)
+    {
+        if (clave == p[i].clave)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 void Busqueda(vector<Producto> &p)
 {
     int clave;
@@ -119,10 +170,10 @@ void Busqueda(vector<Producto> &p)
     cout << "\nIngresa la clave del producto a buscar:" << endl;
     cin >> clave;
 
-    Producto *aux = buscar(clave, p); //Creamos un puntero que puede apuntar a esa direccion en memoria del vector
+    Producto *aux = buscar(clave, p);
 
-    if (aux != nullptr) //Si es diferente de nulo significa que lo encontro y existe, osea podemos mostrarlo
-    {                   //Si es nulo no es diferente asi que no existe
+    if (aux != nullptr)
+    {
         cout << aux->clave << ". "
              << aux->nombre << " $"
              << aux->precio << '\n';
@@ -143,13 +194,13 @@ void eliminar(vector<Producto> &p)
     cin >> clave;
 
     aux = indice(clave, p);
-    if (aux != -1) //Si es diferente de -1 significa que la clave existe y devuelve su indice
+    if (aux != -1)
     {
-        p.erase(p.begin() + aux); //borra del arraylist segun la direccion usando begin de inicio y sumando indices
+        p.erase(p.begin() + aux);
         cout << "Producto eliminado con exito." << endl;
         return;
     }
-    //Si es -1 no es diferente entonces no entra al if y no existe
+
     cout << "Ese producto no existe." << endl;
 }
 
@@ -162,10 +213,10 @@ void modificar(vector<Producto> &p)
 
     cout << "\nIngresa la clave del producto a modificar:" << endl;
     cin >> clave;
-    Producto *aux = buscar(clave, p); //Igual devuelve nulo si no lo encuentra y un puntero, si lo encuentra
+    Producto *aux = buscar(clave, p);
 
-    if (aux != nullptr) //Si es diferente lo encontro y existe para modificarlo y mostrarlo
-    {                   //Si es nulo no existe. No lo mostramos y modificamos
+    if (aux != nullptr)
+    {
         cout << aux->clave << ". "
              << aux->nombre << " $"
              << aux->precio << '\n';
@@ -180,7 +231,7 @@ void modificar(vector<Producto> &p)
             cout << "Ingresa el nuevo nombre:" << endl;
             getline(cin, aux->nombre);
             break;
-            //Usando esa direccion de memoria de ese puntero modificamos los atributos de ese struct en el vector
+
         case 2:
             cout << "Ingresa el nuevo precio:" << endl;
             cin >> aux->precio;
@@ -202,15 +253,16 @@ int main()
     int opc;
     vector<Producto> inv;
 
+    cargarArchivo(inv);
+
     do
     {
-        cout << "\n--- MENU ---\n1. Agregar producto.\n2. Buscar producto." << "\n3. Modificar producto.\n4. Eliminar Producto.\n0. Salir." << endl;
+        cout << "\n--- MENU ---\n1. Agregar producto.\n2. Buscar producto.\n3. Modificar producto.\n4. Eliminar Producto.\n0. Salir." << endl;
         cin >> opc;
-        cin.ignore(); //Para usar getline y no se coma el espacio
+        cin.ignore();
 
         switch (opc)
         {
-
         case 1:
             agregar(inv);
             break;
@@ -240,5 +292,7 @@ int main()
 
     mostrarTodo(inv);
 
-    return 0;
+    guardarArchivo(inv);
+
+        return 0;
 }
