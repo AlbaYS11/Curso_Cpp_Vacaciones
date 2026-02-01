@@ -1,10 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream> //Libreria para guardar archivos
-
-// >> Lee hasta encontrar un espacio, convierte automaticamente al tipo de dato
-// << Escribe en el tipo de dato
+#include <fstream> //Libreria de archivos
+#include <sstream> //Libreria para usar string stream, Nos ayuda a leer o separar texto
 
 using namespace std;
 
@@ -15,25 +13,22 @@ struct Producto
     double precio;
 };
 
-void guardarArchivo(const vector<Producto> &inv)
+void guardarArchivo(const vector<Producto> &inv) //Solo cambia por comas
 { // Funcion para guardar productos en un archivo
 
-    //MODO ESCRITURA
-    ofstream archivo("inventario.txt"); // Crea un archivo nuevo sin importar y lo abre
+    ofstream archivo("inventario.txt"); // Crea un archivo nuevo sin importar
     // Puente entre progra y archivo, nombre variable
-
-    //Todo lo que se escriba aqui ira al archivo
 
     if (archivo.is_open()) // Verifica si se pudo abrir o crear
     {
         for (const auto &p : inv)
         {
-            archivo << p.clave << " " << p.nombre << " " << p.precio << endl; // Sintaxis guardar esa linea en el txt
-        } //Espacios entre para leer
+            archivo << p.clave << "," << p.nombre << "," << p.precio << endl; // Sintaxis guardar esa linea en el txt
+        } //EN ESTE CASO SE PONEN COMAS
 
         archivo.close(); // Siempre cerrar el archivo para guardar
 
-        cout << "--> Datos guardados en inventario.txt" << endl;
+        cout << "--> Datos guardados en inventario.txt (CSV)." << endl;
     }
     else
     {
@@ -43,8 +38,11 @@ void guardarArchivo(const vector<Producto> &inv)
 
 void cargarArchivo(vector<Producto> &inv) //funcion para abrir y guardar
 {
-    //MODO LECTURA
-    ifstream archivo("inventario.txt"); // Inicia el archivo para abrir en lectura
+
+    ifstream archivo("inventario.txt"); // Inicia el archivo para abrir 
+    //IFSTREAM LEE DESDE EL ARCHIVO
+
+    string linea; //CREAR UN STRING PARA LEER Y GUARDAR LINEA
 
     if (!archivo.is_open()) // Verifica si existe
     {
@@ -54,11 +52,25 @@ void cargarArchivo(vector<Producto> &inv) //funcion para abrir y guardar
 
     Producto p; // Declaramos para guardar del archivo
 
-    while (archivo >> p.clave) // O archivo >> p.clave >> p.nombre >> p.precio
+    while (getline(archivo, linea)) //SE LEE TODA LA LINEA DEL ARCHIVO HASTA TERMINAR
     { // mientras de datos y los asignamos a los demas
 
-        archivo >> p.nombre;
-        archivo >> p.precio; // Guardar
+        //PRIMERO OBTIENE TODA LA LINEA EN UN STRING, SE LA PASAMOS AL STREAM
+
+        stringstream stream(linea); //LEE DESDE UNA CADENA DE TEXTO
+        string campo; //LEE EL CAMPO HASTA ANTES DE LA ,
+
+        //ACA EL STREAM LEE DESDE AHI HASTA ENCONTRAR LA COMA Y EL DATO DEL CAMPO SE QUEDA
+        //EN LA CADENA, LA CUAL ASIGNA EL ATRIBUTO
+
+        getline(stream, campo, ',');
+        p.clave = stoi(campo); //CONVIERTE TEXTO A INT
+
+        getline(stream, campo, ',');
+        p.nombre = campo;
+
+        getline(stream, campo, ',');
+        p.precio = stod(campo); //A DOuBLE
 
         inv.push_back(p); // Meter al vector.
     }
