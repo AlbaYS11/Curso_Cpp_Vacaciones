@@ -9,7 +9,7 @@ int main(){
     cout << "Mostrando saldo: " << saldo << endl;
     cout << "Mostrando la direccion en memoria: " << &saldo << endl; //signo &
 
-    int* pSaldo = &saldo; //Declaramos una variable puntero y esta guarda la direccion el saldo
+    int* pSaldo = &saldo; //Declaramos una variable puntero y esta guarda la direccion del saldo
                 //Usando el signo
     cout << "Mostrando saldo del puntero: " << pSaldo << endl;
     cout << "Mostrando la direccion en memoria del puntero: " << &pSaldo << endl;
