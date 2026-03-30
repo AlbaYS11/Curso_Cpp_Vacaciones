@@ -27,14 +27,7 @@ int main()
 
     //5 * 4 bytes al dividirlo recibimos el tamaño sin importar el tipo de dato
 
-    for (int i = 0; i < size; i++) // Para usar los valores
-    { //Se puede llenar de manera tradicional pero podemos usar: 
-
-    *(numeros + i) = dist(gen); //Generar randoms y usar aritmetica de punteros direcciones dentro del arreglo
-    
-    cout << "|" << *(p + i) << "|" ; //Sin endl no salta y no limpia
-
-    }
+     
 
     return 0;
 }

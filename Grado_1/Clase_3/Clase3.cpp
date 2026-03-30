@@ -11,7 +11,7 @@ int main(){
 
     int* pSaldo = &saldo; //Declaramos una variable puntero y esta guarda la direccion del saldo
                 //Usando el signo
-    cout << "Mostrando saldo del puntero: " << pSaldo << endl;
+    cout << "Mostrando saldo del puntero: " << *pSaldo << endl;
     cout << "Mostrando la direccion en memoria del puntero: " << &pSaldo << endl;
 
     *pSaldo = 1000000; //Para usar el puntero debemos darle un *

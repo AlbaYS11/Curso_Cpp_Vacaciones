@@ -1,7 +1,7 @@
 #include <iostream> //Para poder usar System input y output osea cin y cout
 #include <string>   //Para poder usar strings comodamente
 
-#include <vector> //Para poder usar vectores o arralist
+#include <vector> //Para poder usar vectores o arraylist
 // Import
 
 using namespace std; // Para poder usar cin, cout y string sin alias, es la caja de herramientas

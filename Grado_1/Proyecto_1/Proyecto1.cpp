@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct Producto 
+struct Producto  
 {
     int clave;
     string nombre;
